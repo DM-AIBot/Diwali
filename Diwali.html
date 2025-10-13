@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Diwali Greeting</title>
+  <title>AI Diwali Greeting</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -23,6 +23,7 @@
       border-radius: 6px;
       font-size: 16px;
       cursor: pointer;
+      margin-top: 20px;
     }
     button:hover {
       background: #74b9ff;
@@ -38,25 +39,38 @@
   <p id="greetMsg">Datamaticians, let’s celebrate Diwali with AI! 🎤</p>
   <button onclick="startGreeting()">Start Greeting</button>
 
+  <audio id="bgMusic" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_f0e8c0cfa0.mp3?filename=festive-diwali-music-116.mp3" loop></audio>
+
   <script>
+    // Team definitions
+    const teams = {
+      "Tester": ["Rani"],
+      "DBA": ["Deepak"],
+      "Support": ["ChandraShekhar", "Sankalp"],
+      "Developers": ["Poonam", "Nayana", "Gayatri", "Rupali", "Azad", "Kamlesh", "Deep", "Ajay", "Dhanshree", "Akshay", "Sanket"]
+    };
+
     function speak(text, callback) {
       const speech = new SpeechSynthesisUtterance(text);
       speech.rate = 1;
-      window.speechSynthesis.speak(speech);
+      speech.pitch = 1.2;
+
+      // Female voice
+      const voices = window.speechSynthesis.getVoices();
+      speech.voice = voices.find(v => v.name.toLowerCase().includes("female")) || voices[0];
+
       speech.onend = () => callback && callback();
+      window.speechSynthesis.speak(speech);
     }
 
     function startGreeting() {
       const greet = document.getElementById('greetMsg');
       greet.innerText = "✨Initializing AI vibes... preparing your personalized Diwali wish ✨";
 
-      // Step 1: Speak question
-      speak("Welcome to our AI Diwali celebration! May I know your name, please?", function() {
-        // Step 2: Wait 1 second before listening (to avoid echo)
-        setTimeout(() => {
-          greet.innerText = "🎤 I'm all ears! Tell me your name to light up your Diwali greeting...";
-          startListening();
-        }, 200);
+      // Speak question
+      speak("Hello! May I know your name for a personalized Diwali greeting?", function() {
+        greet.innerText = "🎤 I'm all ears! Tell me your name to light up your Diwali greeting!";
+        startListening();
       });
     }
 
@@ -70,17 +84,41 @@
         let name = event.results[0][0].transcript;
         name = name.replace(/[^a-zA-Z ]/g, '').trim();
 
-        // Step 3: Filter out question echoes
-        if (/hello|what|your|name|diwali|celebrate/i.test(name)) {
-          greet.innerText = "Please say only your name.";
-          speak("Please say only your name.");
-          return;
+        if (!name) return;
+
+        recognition.stop();
+
+        // Detect team dynamically
+        let teamFound = null;
+        for (const [team, members] of Object.entries(teams)) {
+          if (members.map(n => n.toLowerCase()).includes(name.toLowerCase())) {
+            teamFound = team;
+            break;
+          }
         }
 
-        // Step 4: Show and speak final message
-        const msg = `Happy Diwali, ${name}! May your year be filled with light, happiness, and success.`;
+        // Generate message based on team
+        let msg;
+        if (teamFound === "Tester") {
+          msg = `Happy Diwali, ${name} May your testing always pass with flying colors! 🎉`;
+        } else if (teamFound === "DBA") {
+          msg = `Happy Diwali, ${name}  May your databases stay happy and healthy! 🎆`;
+        } else if (teamFound === "Support") {
+          msg = `Happy Diwali, ${name} May you always have smooth tickets and happy users! 🪔`;
+        } else if (teamFound === "Developers") {
+          msg = `Happy Diwali, ${name} May your code be bug-free and your year bright! 💻`;
+        } else {
+          msg = `Happy Diwali, ${name}! May your year be filled with light, happiness, and success. 🌟`;
+        }
+
         greet.innerText = msg;
-        speak(msg);
+
+        // Speak the message
+        speak(msg, function() {
+          const music = document.getElementById('bgMusic');
+          music.volume = 0.3;
+          music.play();
+        });
       };
 
       recognition.onerror = function() {
