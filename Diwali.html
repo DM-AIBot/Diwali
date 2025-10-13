@@ -1,146 +1,92 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Diwali Greeting</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    /* Full-screen festive background */
-    body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      color: #fff;
-      text-align: center;
-      background: radial-gradient(circle at top, #ffeaa7, #fab1a0, #d63031);
-    }
-
-    h1 {
-      color: #fff;
-      font-size: 2.5rem;
-      text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
-      margin: 0 0 20px 0;
-    }
-
-    button {
-      background: #0984e3;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 6px;
-      font-size: 18px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-    button:hover {
-      background: #74b9ff;
-    }
-
-    #greetMsg {
-      font-size: 22px;
-      margin-top: 20px;
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.4);
-    }
-
-    /* Fireworks and floating lights effect */
-    @keyframes fireworks {
-      0% {transform: translateY(0);}
-      50% {transform: translateY(-20px);}
-      100% {transform: translateY(0);}
-    }
-    .firework {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      background: yellow;
-      border-radius: 50%;
-      animation: fireworks 1s infinite ease-in-out;
-      opacity: 0.8;
-    }
-  </style>
+<title>Diwali Greeting</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body, html  {
+   margin: 0;
+   padding: 0;
+   height: 100%;
+   width: 100%;
+   overflow: hidden;
+   font-family: 'Comic Sans MS', cursive, sans-serif;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+   color: #fff;
+   text-align: center;
+   background: radial-gradient(circle at top, #ffeaa7, #fab1a0, #d63031);
+}
+h1 {
+  color: #000000; /* Golden color */
+  font-size: 3rem;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.5); 
+  margin: 0 0 20px 0;
+}
+button {
+  background: #0984e3;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+button:hover { background: #74b9ff; }
+#greetMsg { font-size: 22px; margin-top: 20px; }
+</style>
 </head>
 <body>
-  <h1>🪔 Happy Diwali! 🪔</h1>
-  <p id="greetMsg">Datamaticians, let’s celebrate Diwali with AI! 🎤</p>
-  <button onclick="startGreeting()">Start Greeting</button>
 
-  <script>
-    const teams = {
-      "Tester": ["Rani"],
-      "DBA": ["Deepak"],
-      "Support": ["ChandraShekhar", "Sankalp"],
-      "Developers": ["Poonam", "Nayana", "Gayatri", "Rupali", "Azad", "Kamlesh", "Deepkumar", "Ajay", "Dhanshree", "Akshay", "Sanket"]
-    };
+<h1>🪔 Happy Diwali! 🪔</h1>
+<p id="greetMsg">Datamaticians, let’s celebrate Diwali with AI! 🎤</p>
+<button onclick="startGreeting()">Start Greeting</button>
 
-    function speak(text, callback) {
-      const speech = new SpeechSynthesisUtterance(text);
-      speech.rate = 1.1;    // normal speed
-      speech.pitch = 1.1;   // normal pitch
+<script>
+function speak(text, callback) {
+  const speech = new SpeechSynthesisUtterance(text);
+  speech.rate = 1.2;
+  speech.pitch = 1.2;
+  speech.onend = () => callback && callback();
+  window.speechSynthesis.speak(speech);
+}
 
-      // Female voice
-      const voices = window.speechSynthesis.getVoices();
-      speech.voice = voices.find(v => v.name.toLowerCase().includes("female")) || voices[0];
+function startGreeting() {
+  const greet = document.getElementById('greetMsg');
+  greet.innerText = "✨Initializing AI vibes... preparing your personalized Diwali wish ✨";
 
-      speech.onend = () => callback && callback();
-      window.speechSynthesis.speak(speech);
-    }
+  // Speak question and wait until done
+  speak("Hi! Welcome to our AI Diwali celebration. May I know your name?", () => {
+    greet.innerText = "🎤 I'm all ears! Tell me your name to light up your Diwali greeting...";
+    startListening(); // Only start listening after TTS finishes
+  });
+}
 
-    function startGreeting() {
-      const greet = document.getElementById('greetMsg');
-      greet.innerText = "✨Initializing AI vibes... preparing your personalized Diwali wish ✨";
+function startListening() {
+  const greet = document.getElementById('greetMsg');
+  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  recognition.lang = 'en-IN';
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.start();
 
-      // Speak the question first, then start listening after TTS ends
-      speak("Hi! Tell me your name to light up your Diwali greeting.", function() {
-        greet.innerText = "🎤 I'm all ears! Tell me your name...";
-        startListening();
-      });
-    }
+  recognition.onresult = function(event) {
+    let name = event.results[0][0].transcript.replace(/[^a-zA-Z ]/g, '').trim();
+    if (!name) return;
 
-    function startListening() {
-      const greet = document.getElementById('greetMsg');
-      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-      recognition.lang = 'en-IN';
-      recognition.continuous = false;
-      recognition.interimResults = false;
-      recognition.start();
+    recognition.stop();
+    const msg = `Happy Diwali, ${name}! May your year be filled with light, happiness, and success.`;
+    greet.innerText = msg;
+    speak(msg);
+  };
 
-      recognition.onresult = function(event) {
-        let name = event.results[0][0].transcript;
-        name = name.replace(/[^a-zA-Z ]/g, '').trim();
-        if (!name) return;
-
-        recognition.stop();
-
-        // Detect team dynamically
-        let teamFound = null;
-        for (const [team, members] of Object.entries(teams)) {
-          if (members.map(n => n.toLowerCase()).includes(name.toLowerCase())) {
-            teamFound = team;
-            break;
-          }
-        }
-
-        // Generate message based on team
-        let msg;
-        if (teamFound === "Tester") msg = `Happy Diwali, ${name}! May your testing always pass with flying colors!`;
-        else if (teamFound === "DBA") msg = `Happy Diwali, ${name}! May your databases stay happy and healthy!`;
-        else if (teamFound === "Support") msg = `Happy Diwali, ${name}! May you always have smooth tickets and happy users!`;
-        else if (teamFound === "Developers") msg = `Happy Diwali, ${name}! May your code be bug-free and your year bright!`;
-        else msg = `Happy Diwali, ${name}! May your year be filled with light, happiness, and success!`;
-
-        greet.innerText = msg;
-
-      recognition.onerror = function() {
-        greet.innerText = "Sorry, I couldn't hear you properly. Please try again.";
-        speak("Sorry, I couldn't hear you properly. Please try again.");
-      };
-    }
-  </script>
+  recognition.onerror = function() {
+    greet.innerText = "Sorry, I couldn't hear you properly. Please try again.";
+    speak("Sorry, I couldn't hear you properly. Please try again.");
+  };
+}
+</script>
 </body>
 </html>
