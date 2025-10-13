@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Diwali Greeting</title>
+</head>
+<body style="text-align:center; margin-top:50px;">
+  <h1>Happy Diwali!</h1>
+  <p>Enter your name:</p>
+  <input id="name" placeholder="Your name" />
+  <button onclick="sayHello()">Greet Me</button>
+
+  <script>
+    function sayHello() {
+      const name = document.getElementById('name').value;
+      if (!name) {
+        alert('Please enter your name');
+        return;
+      }
+      const msg = `Happy Diwali, ${name}!`;
+      alert(msg);  // Shows message on screen
+
+      // Speaks the message out loud
+      const speech = new SpeechSynthesisUtterance(msg);
+      window.speechSynthesis.speak(speech);
+    }
+  </script>
+</body>
+</html>
