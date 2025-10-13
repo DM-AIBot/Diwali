@@ -48,15 +48,15 @@
 
     function startGreeting() {
       const greet = document.getElementById('greetMsg');
-      greet.innerText = "🤖 Asking your name...";
+      greet.innerText = "✨Initializing AI vibes... preparing your personalized Diwali wish ✨";
 
       // Step 1: Speak question
-      speak("Hello! What is your name?", function() {
+      speak("Welcome to our AI Diwali celebration! May I know your name, please?", function() {
         // Step 2: Wait 1 second before listening (to avoid echo)
         setTimeout(() => {
-          greet.innerText = "🎤 Listening... Please say your name.";
+          greet.innerText = "🎤 I'm all ears! Tell me your name to light up your Diwali greeting...";
           startListening();
-        }, 300);
+        }, 200);
       });
     }
 
@@ -91,4 +91,3 @@
   </script>
 </body>
 </html>
-
