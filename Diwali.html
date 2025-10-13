@@ -2,26 +2,67 @@
 <html>
 <head>
   <title>Diwali Greeting</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      text-align: center;
+      margin-top: 60px;
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #ffeaa7, #fab1a0, #d63031);
+      color: #2d3436;
+    }
+    h1 {
+      color: #fff;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+    }
+    button {
+      background: #0984e3;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #74b9ff;
+    }
+    #greetMsg {
+      font-size: 22px;
+      margin-top: 20px;
+    }
+  </style>
 </head>
-<body style="text-align:center; margin-top:50px;">
-  <h1>Happy Diwali!</h1>
-  <p>Enter your name:</p>
-  <input id="name" placeholder="Your name" />
-  <button onclick="sayHello()">Greet Me</button>
+<body>
+  <h1>🪔 Happy Diwali! 🪔</h1>
+  <p id="greetMsg">Tap below to start your AI Diwali greeting 🎤</p>
+  <button onclick="startGreeting()">Start Greeting</button>
 
   <script>
-    function sayHello() {
-      const name = document.getElementById('name').value;
-      if (!name) {
-        alert('Please enter your name');
-        return;
-      }
-      const msg = `Happy Diwali, ${name}!`;
-      alert(msg);  // Shows message on screen
-
-      // Speaks the message out loud
-      const speech = new SpeechSynthesisUtterance(msg);
+    // Function to speak text
+    function speak(text) {
+      const speech = new SpeechSynthesisUtterance(text);
       window.speechSynthesis.speak(speech);
+    }
+
+    // Function to start voice interaction
+    function startGreeting() {
+      speak("Hello! What is your name?");
+
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'en-IN';
+      recognition.start();
+
+      recognition.onresult = function(event) {
+        const name = event.results[0][0].transcript;
+        const msg = `Happy Diwali, ${name}! May your year be filled with light, happiness, and success.`;
+        document.getElementById('greetMsg').innerText = msg;
+        speak(msg);
+      };
+
+      recognition.onerror = function() {
+        speak("Sorry, I couldn't hear you properly. Please try again.");
+      };
     }
   </script>
 </body>
