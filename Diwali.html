@@ -10,7 +10,7 @@
     height: 100%;
     width: 100%;
     overflow: hidden;
-    font-family: 'Comic Sans MS', sans-serif;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
     background: radial-gradient(circle at top, #ffeaa7, #fab1a0, #d63031);
     display: flex;
     justify-content: center;
@@ -23,6 +23,7 @@
     h1 {
       color: #fff;
       text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+	   font-family: 'Comic Sans MS', cursive, sans-serif;
     }
     button {
       background: #0984e3;
@@ -32,6 +33,7 @@
       border-radius: 6px;
       font-size: 16px;
       cursor: pointer;
+	   font-family: 'Comic Sans MS', cursive, sans-serif;
     }
     button:hover {
       background: #74b9ff;
@@ -57,8 +59,8 @@
 
   function speak(text) {
     const speech = new SpeechSynthesisUtterance(text);
-    speech.rate = 1.2;
-    speech.pitch = 1.2;
+    speech.rate = 1;
+    speech.pitch = 1;
 
     const voices = window.speechSynthesis.getVoices();
     speech.voice = voices.find(v => v.name.toLowerCase().includes("female")) || voices[0];
@@ -79,7 +81,7 @@
       recognition.lang = 'en-IN';
       recognition.start();
 
-      greet.innerText = "🎤 I'm all ears! Tell me your name...";
+      greet.innerText = "🎤 I'm all ears! Tell me your name to light up your Diwali greeting";
 
       recognition.onresult = function(event) {
         let name = event.results[0][0].transcript;
