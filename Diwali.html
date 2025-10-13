@@ -23,7 +23,6 @@
       border-radius: 6px;
       font-size: 16px;
       cursor: pointer;
-      margin-top: 20px;
     }
     button:hover {
       background: #74b9ff;
@@ -39,10 +38,7 @@
   <p id="greetMsg">Datamaticians, let’s celebrate Diwali with AI! 🎤</p>
   <button onclick="startGreeting()">Start Greeting</button>
 
-  <audio id="bgMusic" src="diwali_music.mp3"></audio>
-
   <script>
-   <script>
     const teams = {
       "Tester": ["Rani"],
       "DBA": ["Deepak"],
@@ -67,7 +63,7 @@
       greet.innerText = "✨Initializing AI vibes... preparing your personalized Diwali wish ✨";
 
       // Speak short question and start listening only after TTS ends
-      speak("Hi!Tell me your name to light up your Diwali greeting", function() {
+      speak("Hi! Tell me your name to light up your Diwali greeting", function() {
         greet.innerText = "🎤 I'm all ears! Tell me your name...";
         startListening();
       });
@@ -116,16 +112,7 @@
         if (!teamFound) displayMsg += " 🌟";
         greet.innerText = displayMsg;
 
-        // Speak message and play music after
-        speak(msg, function() {
-          const music = document.getElementById('bgMusic');
-          music.volume = 0.3;
-          music.play().catch(() => {
-            console.log("Music play blocked by browser; requires user interaction.");
-          });
-        });
-      };
-
+        
       recognition.onerror = function() {
         greet.innerText = "Sorry, I couldn't hear you. Please try again.";
         speak("Sorry, I couldn't hear you. Please try again.");
