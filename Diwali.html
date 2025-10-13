@@ -10,7 +10,7 @@ body, html  {
    height: 100%;
    width: 100%;
    overflow: hidden;
-   font-family: 'Comic Sans MS', cursive, sans-serif;
+   font-family: 'Comic Sans MS', sans-serif;
    display: flex;
    justify-content: center;
    align-items: center;
@@ -20,10 +20,11 @@ body, html  {
    background: radial-gradient(circle at top, #ffeaa7, #fab1a0, #d63031);
 }
 h1 {
-  color: #000000; /* Golden color */
+  color: #000000; 
   font-size: 3rem;
   text-shadow: 2px 2px 8px rgba(0,0,0,0.5); 
   margin: 0 0 20px 0;
+   font-family: 'Comic Sans MS', sans-serif;
 }
 button {
   background: #0984e3;
@@ -47,8 +48,8 @@ button:hover { background: #74b9ff; }
 <script>
 function speak(text, callback) {
   const speech = new SpeechSynthesisUtterance(text);
-  speech.rate = 1.2;
-  speech.pitch = 1.2;
+  speech.rate = 1;
+  speech.pitch = 1;
   speech.onend = () => callback && callback();
   window.speechSynthesis.speak(speech);
 }
