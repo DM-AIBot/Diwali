@@ -57,10 +57,13 @@ function startGreeting() {
   const greet = document.getElementById('greetMsg');
   greet.innerText = "✨Initializing AI vibes... preparing your personalized Diwali wish ✨";
 
-  // Speak question and wait until done
   speak("Hi! Welcome to our AI Diwali celebration. May I know your name?", () => {
-    greet.innerText = "🎤 I'm all ears! Tell me your name to light up your Diwali greeting...";
-    startListening(); // Only start listening after TTS finishes
+    greet.innerText = "🎤 I'm all ears! May I know your name...";
+    
+    // Short delay to give user time to get ready
+    setTimeout(() => {
+      startListening();
+    }, 1500); // 1.5 seconds delay
   });
 }
 
@@ -77,7 +80,8 @@ function startListening() {
     if (!name) return;
 
     recognition.stop();
-    const msg = `Happy Diwali, ${name}! May your year be filled with light, happiness, and success.`;
+    const msg = `Happy Diwali, ${name}! As diyas shine bright and fireworks light the night,
+		may your life be filled with endless blessings, love, and delight.`;
     greet.innerText = msg;
     speak(msg);
   };
