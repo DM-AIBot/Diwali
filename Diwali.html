@@ -39,117 +39,98 @@
   <p id="greetMsg">Datamaticians, let’s celebrate Diwali with AI! 🎤</p>
   <button onclick="startGreeting()">Start Greeting</button>
 
-  <audio id="bgMusic" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_f0e8c0cfa0.mp3?filename=festive-diwali-music-116.mp3" loop></audio>
+  <audio id="bgMusic" src="diwali_music.mp3"></audio>
 
   <script>
- // Team definitions
-const teams = {
-  "Tester": ["Rani"],
-  "DBA": ["Deepak"],
-  "Support": ["ChandraShekhar", "Sankalp"],
-  "Developers": ["Poonam", "Nayana", "Gayatri", "Rupali", "Azad", "Kamlesh", "Deep", "Ajay", "Dhanshree", "Akshay", "Sanket"]
-};
+   <script>
+    const teams = {
+      "Tester": ["Rani"],
+      "DBA": ["Deepak"],
+      "Support": ["ChandraShekhar", "Sankalp"],
+      "Developers": ["Poonam", "Nayana", "Gayatri", "Rupali", "Azad", "Kamlesh", "Deep", "Ajay", "Dhanshree", "Akshay", "Sanket"]
+    };
 
-function speak(text, callback) {
-  const speech = new SpeechSynthesisUtterance(text);
-  speech.rate = 1;
-  speech.pitch = 1.2;
+    function speak(text, callback) {
+      const speech = new SpeechSynthesisUtterance(text);
+      speech.rate = 1.3;  // faster
+      speech.pitch = 1.2;
 
-  // Female voice
-  const voices = window.speechSynthesis.getVoices();
-  speech.voice = voices.find(v => v.name.toLowerCase().includes("female")) || voices[0];
+      const voices = window.speechSynthesis.getVoices();
+      speech.voice = voices.find(v => v.name.toLowerCase().includes("female")) || voices[0];
 
-  speech.onend = () => callback && callback();
-  window.speechSynthesis.speak(speech);
-}
-
-function startGreeting() {
-  const greet = document.getElementById('greetMsg');
-  greet.innerText = "✨Initializing AI vibes... preparing your personalized Diwali wish ✨";
-
-  // Speak question
-  speak("Hello! May I know your name for a personalized Diwali greeting?");
-
-  // Start listening immediately while speaking
-  startListening();
-
-  // Update UI as soon as recognition starts
-  const greetMsg = document.getElementById('greetMsg');
-  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-  recognition.lang = 'en-IN';
-
-  recognition.onstart = () => {
-    greetMsg.innerText = "🎤 I'm all ears! Tell me your name to light up your Diwali greeting!";
-  };
-}
-
-function startListening() {
-  const greet = document.getElementById('greetMsg');
-  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-  recognition.lang = 'en-IN';
-  recognition.continuous = false; // Stop after first result
-  recognition.interimResults = false;
-
-  recognition.start();
-
-  recognition.onresult = function(event) {
-    let name = event.results[0][0].transcript;
-    name = name.replace(/[^a-zA-Z ]/g, '').trim();
-
-    if (!name) return;
-
-    recognition.stop();
-
-    // Detect team dynamically
-    let teamFound = null;
-    for (const [team, members] of Object.entries(teams)) {
-      if (members.map(n => n.toLowerCase()).includes(name.toLowerCase())) {
-        teamFound = team;
-        break;
-      }
+      speech.onend = () => callback && callback();
+      window.speechSynthesis.speak(speech);
     }
 
-    // Generate message based on team
-    let msg;
-    if (teamFound === "Tester") {
-      msg = `Happy Diwali, ${name}! May your testing always pass with flying colors!`;
-    } else if (teamFound === "DBA") {
-      msg = `Happy Diwali, ${name}! May your databases stay happy and healthy!`;
-    } else if (teamFound === "Support") {
-      msg = `Happy Diwali, ${name}! May you always have smooth tickets and happy users!`;
-    } else if (teamFound === "Developers") {
-      msg = `Happy Diwali, ${name}! May your code be bug-free and your year bright!`;
-    } else {
-      msg = `Happy Diwali, ${name}! May your year be filled with light, happiness, and success.`;
+    function startGreeting() {
+      const greet = document.getElementById('greetMsg');
+      greet.innerText = "✨Initializing AI vibes... preparing your personalized Diwali wish ✨";
+
+      // Speak short question and start listening only after TTS ends
+      speak("Hi!Tell me your name to light up your Diwali greeting", function() {
+        greet.innerText = "🎤 I'm all ears! Tell me your name...";
+        startListening();
+      });
     }
 
-    // Display message with emojis visually
-    let displayMsg = msg;
-    if (teamFound === "Tester") displayMsg += " 🎉";
-    if (teamFound === "DBA") displayMsg += " 🎆";
-    if (teamFound === "Support") displayMsg += " 🪔";
-    if (teamFound === "Developers") displayMsg += " 💻";
-    if (!teamFound) displayMsg += " 🌟";
+    function startListening() {
+      const greet = document.getElementById('greetMsg');
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'en-IN';
+      recognition.continuous = false;
+      recognition.interimResults = false;
 
-    greet.innerText = displayMsg;
+      recognition.start();
 
-    // Speak message without emojis
-    const speakText = msg;
-    speak(speakText, function() {
-      setTimeout(() => {
-        const music = document.getElementById('bgMusic');
-        music.volume = 0.3;
-        music.play();
-      }, 200);
-    });
-  };
+      recognition.onresult = function(event) {
+        let name = event.results[0][0].transcript;
+        name = name.replace(/[^a-zA-Z ]/g, '').trim();
 
-  recognition.onerror = function() {
-    greet.innerText = "Sorry, I couldn't hear you properly. Please try again.";
-    speak("Sorry, I couldn't hear you properly. Please try again.");
-  };
-}
+        if (!name) return;
 
+        recognition.stop();
+
+        // Detect team
+        let teamFound = null;
+        for (const [team, members] of Object.entries(teams)) {
+          if (members.map(n => n.toLowerCase()).includes(name.toLowerCase())) {
+            teamFound = team;
+            break;
+          }
+        }
+
+        // Message without emojis for TTS
+        let msg;
+        if (teamFound === "Tester") msg = `Happy Diwali, ${name}! May your testing always pass with flying colors!`;
+        else if (teamFound === "DBA") msg = `Happy Diwali, ${name}! May your databases stay happy and healthy!`;
+        else if (teamFound === "Support") msg = `Happy Diwali, ${name}! May you always have smooth tickets and happy users!`;
+        else if (teamFound === "Developers") msg = `Happy Diwali, ${name}! May your code be bug-free and your year bright!`;
+        else msg = `Happy Diwali, ${name}! May your year be filled with light, happiness, and success.`;
+
+        // Visual message with emojis
+        let displayMsg = msg;
+        if (teamFound === "Tester") displayMsg += " 🎉";
+        if (teamFound === "DBA") displayMsg += " 🎆";
+        if (teamFound === "Support") displayMsg += " 🪔";
+        if (teamFound === "Developers") displayMsg += " 💻";
+        if (!teamFound) displayMsg += " 🌟";
+        greet.innerText = displayMsg;
+
+        // Speak message and play music after
+        speak(msg, function() {
+          const music = document.getElementById('bgMusic');
+          music.volume = 0.3;
+          music.play().catch(() => {
+            console.log("Music play blocked by browser; requires user interaction.");
+          });
+        });
+      };
+
+      recognition.onerror = function() {
+        greet.innerText = "Sorry, I couldn't hear you. Please try again.";
+        speak("Sorry, I couldn't hear you. Please try again.");
+      };
+    }
   </script>
 </body>
 </html>
