@@ -41,12 +41,9 @@
   <script>
     function speak(text, callback) {
       const speech = new SpeechSynthesisUtterance(text);
+      speech.rate = 1;
       window.speechSynthesis.speak(speech);
-
-      // Run callback after speaking finishes
-      speech.onend = function() {
-        if (callback) callback();
-      };
+      speech.onend = () => callback && callback();
     }
 
     function startGreeting() {
@@ -55,28 +52,41 @@
 
       // Step 1: Speak question
       speak("Hello! What is your name?", function() {
-        // Step 2: Start listening after question finishes
-        greet.innerText = "🎤 Listening... Please say your name.";
-
-        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.lang = 'en-IN';
-        recognition.start();
-
-        recognition.onresult = function(event) {
-          let name = event.results[0][0].transcript;
-          name = name.replace(/[^a-zA-Z ]/g, '').trim();
-
-          // Step 3: Show and speak Diwali message
-          const msg = `Happy Diwali, ${name}! May your year be filled with light, happiness, and success.`;
-          greet.innerText = msg;
-          speak(msg);
-        };
-
-        recognition.onerror = function() {
-          greet.innerText = "Sorry, I couldn't hear you properly. Please try again.";
-          speak("Sorry, I couldn't hear you properly. Please try again.");
-        };
+        // Step 2: Wait 1 second before listening (to avoid echo)
+        setTimeout(() => {
+          greet.innerText = "🎤 Listening... Please say your name.";
+          startListening();
+        }, 1000);
       });
+    }
+
+    function startListening() {
+      const greet = document.getElementById('greetMsg');
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'en-IN';
+      recognition.start();
+
+      recognition.onresult = function(event) {
+        let name = event.results[0][0].transcript;
+        name = name.replace(/[^a-zA-Z ]/g, '').trim();
+
+        // Step 3: Filter out question echoes
+        if (/hello|what|your|name|diwali|celebrate/i.test(name)) {
+          greet.innerText = "Please say only your name.";
+          speak("Please say only your name.");
+          return;
+        }
+
+        // Step 4: Show and speak final message
+        const msg = `Happy Diwali, ${name}! May your year be filled with light, happiness, and success.`;
+        greet.innerText = msg;
+        speak(msg);
+      };
+
+      recognition.onerror = function() {
+        greet.innerText = "Sorry, I couldn't hear you properly. Please try again.";
+        speak("Sorry, I couldn't hear you properly. Please try again.");
+      };
     }
   </script>
 </body>
