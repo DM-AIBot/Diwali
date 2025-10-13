@@ -35,34 +35,48 @@
 </head>
 <body>
   <h1>🪔 Happy Diwali! 🪔</h1>
-  <p id="greetMsg">Tap below to start your AI Diwali greeting 🎤</p>
+  <p id="greetMsg">Datamaticians, let’s celebrate Diwali with AI! 🎤</p>
   <button onclick="startGreeting()">Start Greeting</button>
 
   <script>
-    // Function to speak text
-    function speak(text) {
+    function speak(text, callback) {
       const speech = new SpeechSynthesisUtterance(text);
       window.speechSynthesis.speak(speech);
+
+      // Run callback after speaking finishes
+      speech.onend = function() {
+        if (callback) callback();
+      };
     }
 
-    // Function to start voice interaction
     function startGreeting() {
-      speak("Hello! What is your name?");
+      const greet = document.getElementById('greetMsg');
+      greet.innerText = "🤖 Asking your name...";
 
-      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-      recognition.lang = 'en-IN';
-      recognition.start();
+      // Step 1: Speak question
+      speak("Hello! What is your name?", function() {
+        // Step 2: Start listening after question finishes
+        greet.innerText = "🎤 Listening... Please say your name.";
 
-      recognition.onresult = function(event) {
-        const name = event.results[0][0].transcript;
-        const msg = `Happy Diwali, ${name}! May your year be filled with light, happiness, and success.`;
-        document.getElementById('greetMsg').innerText = msg;
-        speak(msg);
-      };
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'en-IN';
+        recognition.start();
 
-      recognition.onerror = function() {
-        speak("Sorry, I couldn't hear you properly. Please try again.");
-      };
+        recognition.onresult = function(event) {
+          let name = event.results[0][0].transcript;
+          name = name.replace(/[^a-zA-Z ]/g, '').trim();
+
+          // Step 3: Show and speak Diwali message
+          const msg = `Happy Diwali, ${name}! May your year be filled with light, happiness, and success.`;
+          greet.innerText = msg;
+          speak(msg);
+        };
+
+        recognition.onerror = function() {
+          greet.innerText = "Sorry, I couldn't hear you properly. Please try again.";
+          speak("Sorry, I couldn't hear you properly. Please try again.");
+        };
+      });
     }
   </script>
 </body>
