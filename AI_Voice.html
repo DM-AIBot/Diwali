@@ -3,7 +3,6 @@
 <head> 
   <title>Diwali Greeting</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Add Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 
   <style>
@@ -28,29 +27,14 @@
       font-size: 3rem;
       text-shadow: 2px 2px 8px rgba(0,0,0,0.5); 
       margin: 0 0 20px 0;
-      font-family: 'Comic Sans MS', sans-serif;
-    }
-
-    button {
-      background: #0984e3;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #74b9ff;
     }
 
     #greetMsg {
       font-size: 22px;
       margin-top: 20px;
+      max-width: 90%;
     }
 
-    /* 🔥 New Style for #word */
     #word {
       font-family: 'Pacifico', cursive;
       font-size: 2.5rem;
@@ -76,18 +60,22 @@
     }
   </style>
 </head>
-<body>
 
- <h1>🪔 Happy Diwali! 🪔</h1>
-<p id="greetMsg">Dear Datamatician, please enjoy your 
-Sweet Loops of Infinite Joy, Recursive Taste, Deliciously prepared and Distributed Sweetness in Every Bite of</p>
+<body>
+  <h1>🪔 Happy Diwali! 🪔</h1>
+  <p id="greetMsg">Dear Datamatician, please enjoy your Sweet Loops of Infinite Joy, Recursive Taste, Deliciously prepared and Distributed Sweetness in Every Bite of</p>
   <div id="word">Loading...</div>
 
   <script>
     const words = [
-      "Recursive Loops Jelebi", "Bytes Barfi", "SweetAutomation Pedha", "DistributedCrunch Son Papdi" ,"EncryptedElegance Kaju Katli", "Oops! That sweet didn’t compile. Try again!"
-    ,"404 Sweet Not Found — Better luck next time!"
-	];
+      "Recursive Loops Jelebi",
+      "Bytes Barfi",
+      "SweetAutomation Pedha",
+      "DistributedCrunch Son Papdi",
+      "EncryptedElegance Kaju Katli",
+      "Oops! That sweet didn’t compile. Try again!",
+      "404 Sweet Not Found — Better luck next time!"
+    ];
 
     let voices = [];
 
@@ -98,7 +86,7 @@ Sweet Loops of Infinite Joy, Recursive Taste, Deliciously prepared and Distribut
       } else if (retries > 0) {
         setTimeout(() => getVoicesWithRetry(callback, retries - 1), 200);
       } else {
-        alert("❌ Failed to load speech voices.");
+        console.warn("❌ Failed to load voices");
       }
     }
 
@@ -118,29 +106,25 @@ Sweet Loops of Infinite Joy, Recursive Taste, Deliciously prepared and Distribut
 
       if (preferredVoice) {
         utterance.voice = preferredVoice;
-        console.log("✅ Using voice:", preferredVoice.name);
-      } else {
-        console.warn("⚠️ Female voice not found, using default.");
       }
 
-      utterance.rate = 0.8;
+      utterance.rate = 1;
       utterance.pitch = 1;
       utterance.volume = 1.0;
-      utterance.lang = "en-US";
+      utterance.lang = "en-UK";
 
       speechSynthesis.speak(utterance);
     }
 
-    // On page load, wait for voices and then speak
+    // On page load
     window.onload = () => {
       getVoicesWithRetry(speakRandomWord);
     };
 
-    // Also listen for voiceschanged event (some browsers require it)
+    // Some browsers require this to update voices properly
     speechSynthesis.onvoiceschanged = () => {
       voices = speechSynthesis.getVoices();
     };
   </script>
-
 </body>
 </html>
