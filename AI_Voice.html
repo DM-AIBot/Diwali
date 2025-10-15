@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+  <title>Diwali Greeting</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Add Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      font-family: 'Comic Sans MS', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: #fff;
+      text-align: center;
+      background: radial-gradient(circle at top, #ffeaa7, #fab1a0, #d63031);
+    }
+
+    h1 {
+      color: #000000; 
+      font-size: 3rem;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.5); 
+      margin: 0 0 20px 0;
+      font-family: 'Comic Sans MS', sans-serif;
+    }
+
+    button {
+      background: #0984e3;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #74b9ff;
+    }
+
+    #greetMsg {
+      font-size: 22px;
+      margin-top: 20px;
+    }
+
+    /* 🔥 New Style for #word */
+    #word {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.5rem;
+      margin-top: 30px;
+      color: #fff5b7;
+      text-shadow: 0 0 8px #ffeaa7, 0 0 15px #fdcb6e, 0 0 25px #fdcb6e;
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        text-shadow: 0 0 8px #ffeaa7, 0 0 15px #fdcb6e, 0 0 25px #fdcb6e;
+      }
+      50% {
+        transform: scale(1.05);
+        text-shadow: 0 0 12px #fff, 0 0 20px #ffeaa7, 0 0 30px #fab1a0;
+      }
+      100% {
+        transform: scale(1);
+        text-shadow: 0 0 8px #ffeaa7, 0 0 15px #fdcb6e, 0 0 25px #fdcb6e;
+      }
+    }
+  </style>
+</head>
+<body>
+
+ <h1>🪔 Happy Diwali! 🪔</h1>
+<p id="greetMsg">Dear Datamatician, please enjoy your 
+Sweet Loops of Infinite Joy, Recursive Taste, Deliciously prepared and Distributed Sweetness in Every Bite of</p>
+  <div id="word">Loading...</div>
+
+  <script>
+    const words = [
+      "Recursive Loops Jelebi", "Bytes Barfi", "SweetAutomation Pedha", "DistributedCrunch Son Papdi" ,"EncryptedElegance Kaju Katli", "Oops! That sweet didn’t compile. Try again!"
+    ,"404 Sweet Not Found — Better luck next time!"
+	];
+
+    let voices = [];
+
+    function getVoicesWithRetry(callback, retries = 10) {
+      voices = speechSynthesis.getVoices();
+      if (voices.length > 0) {
+        callback();
+      } else if (retries > 0) {
+        setTimeout(() => getVoicesWithRetry(callback, retries - 1), 200);
+      } else {
+        alert("❌ Failed to load speech voices.");
+      }
+    }
+
+    function getPreferredFemaleVoice() {
+      return voices.find(v =>
+        v.lang.startsWith("en") &&
+        /female/i.test(v.name + v.voiceURI + v.lang)
+      ) || voices.find(v => v.lang.startsWith("en"));
+    }
+
+    function speakRandomWord() {
+      const word = words[Math.floor(Math.random() * words.length)];
+      document.getElementById("word").textContent = word;
+
+      const utterance = new SpeechSynthesisUtterance(word);
+      const preferredVoice = getPreferredFemaleVoice();
+
+      if (preferredVoice) {
+        utterance.voice = preferredVoice;
+        console.log("✅ Using voice:", preferredVoice.name);
+      } else {
+        console.warn("⚠️ Female voice not found, using default.");
+      }
+
+      utterance.rate = 0.8;
+      utterance.pitch = 1;
+      utterance.volume = 1.0;
+      utterance.lang = "en-US";
+
+      speechSynthesis.speak(utterance);
+    }
+
+    // On page load, wait for voices and then speak
+    window.onload = () => {
+      getVoicesWithRetry(speakRandomWord);
+    };
+
+    // Also listen for voiceschanged event (some browsers require it)
+    speechSynthesis.onvoiceschanged = () => {
+      voices = speechSynthesis.getVoices();
+    };
+  </script>
+
+</body>
+</html>
