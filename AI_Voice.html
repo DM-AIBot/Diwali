@@ -20,6 +20,7 @@
       color: #fff;
       text-align: center;
       background: radial-gradient(circle at top, #ffeaa7, #fab1a0, #d63031);
+      cursor: pointer;
     }
 
     h1 {
@@ -61,19 +62,26 @@
   </style>
 </head>
 
-<body>
+<body >
+
   <h1>🪔 Happy Diwali! 🪔</h1>
-  <p id="greetMsg">Dear Datamatician, please enjoy your Sweet Loops of Infinite Joy, Recursive Taste, Deliciously prepared and Distributed Sweetness in Every Bite of</p>
-  <div id="word">Loading...</div>
+  <p id="greetMsg">👉 Tap anywhere to get your sweet greeting!</p>
+  <div id="word">...</div>
 
   <script>
+  
+  window.onload = () => {
+  getVoicesWithRetry(() => {
+    initSpeech();
+  });
+};
+
     const words = [
       "Recursive Loops Jelebi",
       "Bytes Barfi",
       "SweetAutomation Pedha",
       "DistributedCrunch Son Papdi",
       "EncryptedElegance Kaju Katli",
-      "Oops! That sweet didn’t compile. Try again!",
       "404 Sweet Not Found — Better luck next time!"
     ];
 
@@ -86,7 +94,7 @@
       } else if (retries > 0) {
         setTimeout(() => getVoicesWithRetry(callback, retries - 1), 200);
       } else {
-        console.warn("❌ Failed to load voices");
+        alert("❌ Failed to load voices");
       }
     }
 
@@ -97,10 +105,7 @@
       ) || voices.find(v => v.lang.startsWith("en"));
     }
 
-    function speakRandomWord() {
-      const word = words[Math.floor(Math.random() * words.length)];
-      document.getElementById("word").textContent = word;
-
+    function speakWord(word) {
       const utterance = new SpeechSynthesisUtterance(word);
       const preferredVoice = getPreferredFemaleVoice();
 
@@ -108,20 +113,31 @@
         utterance.voice = preferredVoice;
       }
 
-      utterance.rate = 1;
+      utterance.rate = 0.8;
       utterance.pitch = 1;
       utterance.volume = 1.0;
-      utterance.lang = "en-UK";
+      utterance.lang = "en-US";
 
       speechSynthesis.speak(utterance);
     }
 
-    // On page load
-    window.onload = () => {
-      getVoicesWithRetry(speakRandomWord);
-    };
+    function initSpeech() {
+      if (window.hasSpoken) return;
+      window.hasSpoken = true;
 
-    // Some browsers require this to update voices properly
+      getVoicesWithRetry(() => {
+        const word = words[Math.floor(Math.random() * words.length)];
+        document.getElementById("word").textContent = word;
+
+        // Update message after speech
+        document.getElementById("greetMsg").textContent =
+          "Dear Datamatician, please enjoy your Sweet Loops of Infinite Joy, Recursive Taste, Deliciously prepared and Distributed Sweetness in Every Bite of";
+
+        speakWord(word);
+      });
+    }
+
+    // Also update voices when browser fires this event
     speechSynthesis.onvoiceschanged = () => {
       voices = speechSynthesis.getVoices();
     };
