@@ -48,8 +48,8 @@ button:hover { background: #74b9ff; }
 <script>
 function speak(text, callback) {
   const speech = new SpeechSynthesisUtterance(text);
-  speech.rate = 1;
-  speech.pitch = 1;
+  speech.rate = 1.2;
+  speech.pitch = 1.2;
   speech.onend = () => callback && callback();
   window.speechSynthesis.speak(speech);
 }
@@ -64,7 +64,7 @@ function startGreeting() {
     // Short delay to give user time to get ready
     setTimeout(() => {
       startListening();
-    }, 1500); // 1.5 seconds delay
+    }, 1000); // 1.5 seconds delay
   });
 }
 
@@ -91,6 +91,11 @@ function startListening() {
     greet.innerText = "Sorry, I couldn't hear you properly. Please try again.";
     speak("Sorry, I couldn't hear you properly. Please try again.");
   };
+  
+  document.addEventListener("DOMContentLoaded", () => {
+  document.body.addEventListener("mousemove", onceInit);
+});
+
 }
 </script>
 </body>
