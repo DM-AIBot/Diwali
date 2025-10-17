@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Diwali</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      font-family: 'Poppins', 'Comic Sans MS', cursive, sans-serif;
+      background: radial-gradient(circle at top, #ffeaa7, #fab1a0, #d63031);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    h1, p {
+      z-index: 2;
+      position: relative;
+      max-width: 90%;
+      color: #ffffff;
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+    }
+
+    h1 {
+      font-size: clamp(2rem, 6vw, 4rem);
+      margin-bottom: 1rem;
+      transition: transform 0.3s ease;
+    }
+
+    h1:hover {
+      transform: scale(1.05);
+    }
+
+    .golden-text {
+      background: linear-gradient(to right, #FFD700, #FF6347); /* golden-red */
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    p {
+      font-size: clamp(1rem, 3vw, 1.5rem);
+      margin: 0.5rem 0;
+    }
+
+    .hover-text {
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .hover-text:hover {
+      transform: scale(1.03);
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    @media (max-width: 600px) {
+      h1, p {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="hover-text">🪔 Happy Diwali! 🪔</h1>
+  <h1 class="hover-text golden-text">Welcome To FINATO</h1>
+  <p class="hover-text">Datamaticians, let’s celebrate Diwali with AI! 🎤</p>
+  <p class="hover-text">✨ Wishing you a sparkling Diwali filled with joy, prosperity, and endless happiness! ✨</p>
+
+  <canvas id="fireworks"></canvas>
+  <audio id="hover-audio" preload="auto"></audio>
+
+  <script>
+    const songs = [
+      'songs/song1.mp3',
+      'songs/song2.mp3',
+      'songs/song3.mp3',
+      'songs/song4.mp3'
+    ];
+
+    const audioPlayer = document.getElementById('hover-audio');
+    const textElements = document.querySelectorAll('.hover-text');
+
+    let audioStarted = false;
+
+    function playRandomSong() {
+      const randomSong = songs[Math.floor(Math.random() * songs.length)];
+      audioPlayer.src = randomSong;
+      audioPlayer.play().catch(err => {
+        console.warn("Audio play failed:", err);
+      });
+    }
+
+    function handleFirstInteraction() {
+      if (audioStarted) return;
+      audioStarted = true;
+      playRandomSong();
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('touchstart', handleFirstInteraction);
+    }
+
+    document.addEventListener('click', handleFirstInteraction);
+    document.addEventListener('touchstart', handleFirstInteraction);
+
+    textElements.forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        if (audioStarted) playRandomSong();
+      });
+      el.addEventListener('touchstart', () => {
+        if (audioStarted) playRandomSong();
+      });
+    });
+
+    // Fireworks
+    const canvas = document.getElementById('fireworks');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor(x, y, color, isRocket) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.radius = isRocket ? 2 : Math.random() * 3 + 1;
+        this.alpha = 1;
+        this.fade = isRocket ? 0.05 : Math.random() * 0.03 + 0.01;
+        if (isRocket) {
+          this.speedX = (Math.random() - 0.5) * 1;
+          this.speedY = (Math.random() - 0.5) * 1;
+          this.gravity = 0.05;
+        } else {
+          const angle = Math.random() * 2 * Math.PI;
+          const speed = Math.random() * 5 + 2;
+          this.speedX = Math.cos(angle) * speed;
+          this.speedY = Math.sin(angle) * speed;
+          this.gravity = 0.05;
+        }
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.speedY += this.gravity;
+        this.alpha -= this.fade;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    class Rocket {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = canvas.height + 10;
+        this.targetY = Math.random() * canvas.height / 2;
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.particles = [];
+        this.exploded = false;
+        this.speedY = -5 - Math.random() * 3;
+      }
+
+      update() {
+        if (!this.exploded) {
+          this.y += this.speedY;
+          this.particles.push(new Particle(this.x, this.y, this.color, true));
+          if (this.y <= this.targetY) this.explode();
+        } else {
+          this.particles.forEach(p => p.update());
+          this.particles = this.particles.filter(p => p.alpha > 0);
+        }
+      }
+
+      explode() {
+        this.exploded = true;
+        for (let i = 0; i < 50; i++) {
+          this.particles.push(new Particle(this.x, this.y, colors[Math.floor(Math.random() * colors.length)], false));
+        }
+      }
+
+      draw() {
+        this.particles.forEach(p => p.draw());
+      }
+
+      alive() {
+        return !this.exploded || this.particles.length > 0;
+      }
+    }
+
+    const rockets = [];
+    const colors = ['#ffec61', '#ffab61', '#61ffec', '#ff61ec', '#61ff61', '#ffd700', '#ff4500'];
+
+    function animate() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      if (Math.random() < 0.05) rockets.push(new Rocket());
+
+      for (let i = rockets.length - 1; i >= 0; i--) {
+        rockets[i].update();
+        rockets[i].draw();
+        if (!rockets[i].alive()) rockets.splice(i, 1);
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
