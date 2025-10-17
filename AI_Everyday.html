@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Power of AI in Everyday Life</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; scroll-behavior: smooth; }
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+      color:#fff;
+      overflow-x:hidden;
+    }
+
+    h1,h2,h3 { letter-spacing:1px; }
+    p { opacity:0.9; line-height:1.6; }
+    section { padding:80px 20px; max-width:1200px; margin:auto; position:relative; }
+
+    header {
+      text-align:center;
+      padding:120px 20px 80px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.05), transparent);
+    }
+
+    header h1 {
+      font-size:3em;
+      background: linear-gradient(90deg, #00d4ff, #72efff, #ff6ec7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom:20px;
+      animation: gradientShift 5s ease infinite;
+    }
+
+    header p { font-size:1.3em; opacity:0.85; max-width:700px; margin:auto; }
+
+    @keyframes gradientShift {
+      0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}
+    }
+
+    /* Video */
+    .video-container { display:flex; justify-content:center; align-items:center; margin-top:50px; opacity:0; transform:translateY(50px); transition: all 1s ease-out; }
+    .video-container iframe {
+      border-radius:20px; box-shadow:0 0 35px rgba(0,212,255,0.5); width:85%; max-width:900px; height:500px; transition: transform 0.4s ease;
+    }
+    .video-container iframe:hover { transform:scale(1.03); }
+
+    /* Cards */
+    .cards { display:flex; flex-wrap:wrap; justify-content:center; gap:30px; margin-top:60px; }
+    .card {
+      background: rgba(255,255,255,0.08);
+      border-radius:25px; padding:30px; width:320px;
+      text-align:center; box-shadow:0 8px 30px rgba(0,0,0,0.4);
+      transition: all 0.5s ease; opacity:0; transform:translateY(50px);
+      cursor:pointer; backdrop-filter: blur(6px);
+    }
+    .card:hover {
+      transform:translateY(-15px) scale(1.03);
+      background: rgba(255,255,255,0.12);
+      box-shadow:0 12px 40px rgba(0,212,255,0.5);
+    }
+    .card h3 { color:#00d4ff; margin-bottom:10px; }
+
+    /* Icons Section */
+    .icons-section { display:flex; flex-wrap:wrap; justify-content:center; gap:50px; margin-top:60px; }
+    .icon-card {
+      display:flex; flex-direction:column; align-items:center;
+      background: rgba(255,255,255,0.05); padding:30px; border-radius:20px;
+      width:200px; text-align:center; box-shadow:0 8px 25px rgba(0,0,0,0.3);
+      transition: all 0.5s ease; opacity:0; transform:translateY(50px);
+    }
+    .icon-card i {
+      font-size:3em; color:#00d4ff; margin-bottom:15px;
+      transition: transform 0.4s ease, color 0.4s ease;
+    }
+    .icon-card:hover i { transform: scale(1.2) rotate(10deg); color:#ff6ec7; }
+    .icon-card p { margin-top:5px; font-size:0.95em; }
+
+    /* Extended Usecases Section (newly added) */
+    .usecases-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 40px;
+    }
+    .usecase {
+      display: flex;
+      gap: 15px;
+      align-items: flex-start;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      transition: all 0.5s ease;
+      opacity:0;
+      transform: translateY(40px);
+      backdrop-filter: blur(4px);
+    }
+    .usecase:hover {
+      transform: translateY(-10px);
+      background: rgba(255,255,255,0.1);
+      box-shadow: 0 10px 35px rgba(0,212,255,0.4);
+    }
+    .icon-circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #00d4ff, #7c5cff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      color: #fff;
+      box-shadow: 0 0 15px rgba(0,212,255,0.4);
+    }
+    .usecase-text .title {
+      font-weight: 600;
+      color: #00d4ff;
+      margin-bottom: 5px;
+    }
+    .usecase-text .desc {
+      font-size: 0.95em;
+      color: #ccc;
+    }
+
+    footer { background: rgba(0,0,0,0.5); text-align:center; padding:30px; color:#ccc; font-size:0.95em; margin-top:50px; }
+
+    @media(max-width:768px){
+      header h1{ font-size:2.2em; }
+      .video-container iframe{ height:300px; }
+      .icons-section { gap:30px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>💡 The Power of AI in Everyday Life</h1>
+    <p>Artificial Intelligence is no longer the future — it’s part of our daily routines, silently enhancing productivity, safety, and comfort.</p>
+  </header>
+
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/oJC8VIDSx_Q?autoplay=1&mute=1&rel=0&showinfo=0"
+      title="AI in Everyday Life Video" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen>
+    </iframe>
+  </div>
+
+  <section>
+    <h2 style="text-align:center; color:#00d4ff; margin-bottom:30px;">Where AI Makes a Difference</h2>
+    <div class="cards">
+      <div class="card"><h3>🤖 Virtual Assistants</h3><p>Alexa, Siri, Google Assistant help with tasks and reminders.</p></div>
+      <div class="card"><h3>🚗 Smart Navigation</h3><p>AI predicts traffic, suggests faster routes, and optimizes travel.</p></div>
+      <div class="card"><h3>💬 Personalized Communication</h3><p>AI-powered chatbots and translators enhance communication.</p></div>
+      <div class="card"><h3>🏠 Home Automation</h3><p>Smart homes adapt lighting, climate, and security to your routines.</p></div>
+      <div class="card"><h3>💰 Finance</h3><p>AI detects fraud, monitors spending, and provides advice.</p></div>
+      <div class="card"><h3>🎬 Entertainment</h3><p>AI recommends movies, shows, and music personalized for you.</p></div>
+    </div>
+  </section>
+
+  <!-- Icons Section -->
+  <section>
+    <h2 style="text-align:center; color:#00d4ff; margin-bottom:30px;">More Ways AI Helps You Daily</h2>
+    <div class="icons-section">
+      <div class="icon-card"><i class="fas fa-bolt"></i><p>Smart Notifications</p></div>
+      <div class="icon-card"><i class="fas fa-shopping-cart"></i><p>Personalized Shopping</p></div>
+      <div class="icon-card"><i class="fas fa-music"></i><p>Adaptive Music Playlists</p></div>
+      <div class="icon-card"><i class="fas fa-lightbulb"></i><p>Smart Home Devices</p></div>
+      <div class="icon-card"><i class="fas fa-plane"></i><p>Travel Assistance</p></div>
+      <div class="icon-card"><i class="fas fa-camera"></i><p>Enhanced Photography</p></div>
+      <div class="icon-card"><i class="fas fa-shield-alt"></i><p>Cybersecurity</p></div>
+      <div class="icon-card"><i class="fas fa-heartbeat"></i><p>Health Monitoring</p></div>
+      <div class="icon-card"><i class="fas fa-car"></i><p>Smart Driving Assistance</p></div>
+      <div class="icon-card"><i class="fas fa-book"></i><p>AI Tutors</p></div>
+    </div>
+  </section>
+
+  <!-- New Extended List Section -->
+  <section>
+    <h2 style="text-align:center; color:#00d4ff;">More Detailed AI Use Cases</h2>
+    <p style="text-align:center; opacity:0.8; margin-top:10px;">Explore how AI simplifies everyday personal and professional tasks</p>
+
+    <div class="usecases-grid">
+      <div class="usecase"><div class="icon-circle">A</div><div class="usecase-text"><div class="title">Email Drafting</div><div class="desc">Generate subject lines, summarize threads, and propose action items.</div></div></div>
+      <div class="usecase"><div class="icon-circle">C</div><div class="usecase-text"><div class="title">Calendar Scheduling</div><div class="desc">Auto-suggest meeting times & generate agendas.</div></div></div>
+      <div class="usecase"><div class="icon-circle">R</div><div class="usecase-text"><div class="title">Research Summaries</div><div class="desc">Condense long articles into key bullets.</div></div></div>
+      <div class="usecase"><div class="icon-circle">T</div><div class="usecase-text"><div class="title">Voice Notes</div><div class="desc">Create audio versions of docs or memos for commutes.</div></div></div>
+      <div class="usecase"><div class="icon-circle">I</div><div class="usecase-text"><div class="title">Image Generation</div><div class="desc">Create mockups, thumbnails, and icons effortlessly.</div></div></div>
+      <div class="usecase"><div class="icon-circle">B</div><div class="usecase-text"><div class="title">Budgeting</div><div class="desc">Auto-categorize receipts and suggest budgets.</div></div></div>
+      <div class="usecase"><div class="icon-circle">S</div><div class="usecase-text"><div class="title">Smart Search</div><div class="desc">Search across documents and get instant answers.</div></div></div>
+      <div class="usecase"><div class="icon-circle">L</div><div class="usecase-text"><div class="title">Language Translation</div><div class="desc">Translate messages and localize content quickly.</div></div></div>
+      <div class="usecase"><div class="icon-circle">M</div><div class="usecase-text"><div class="title">Meeting Transcripts</div><div class="desc">Automated notes and highlight extraction.</div></div></div>
+      <div class="usecase"><div class="icon-circle">P</div><div class="usecase-text"><div class="title">Presentation Design</div><div class="desc">Draft slides and suggest visuals & data highlights.</div></div></div>
+      <div class="usecase"><div class="icon-circle">Q</div><div class="usecase-text"><div class="title">Question Answering</div><div class="desc">Ask a doc a question and get the answer instantly.</div></div></div>
+      <div class="usecase"><div class="icon-circle">N</div><div class="usecase-text"><div class="title">Personalized News</div><div class="desc">Generate tailored digests from multiple sources.</div></div></div>
+      <div class="usecase"><div class="icon-circle">F</div><div class="usecase-text"><div class="title">Form Auto-Fill</div><div class="desc">Extract fields from documents and populate forms.</div></div></div>
+      <div class="usecase"><div class="icon-circle">O</div><div class="usecase-text"><div class="title">Optimized Routing</div><div class="desc">Smart travel and delivery suggestions to save time.</div></div></div>
+    </div>
+  </section>
+
+  <footer>
+    © 2025 | Designed with ❤️ using AI Inspiration | @Arayaman | @C.Shekhar
+  </footer>
+
+  <script>
+    const faders = document.querySelectorAll('.card, .icon-card, .usecase, .video-container');
+
+    const appearOptions = { threshold: 0.2, rootMargin: "0px 0px -50px 0px" };
+
+    const appearOnScroll = new IntersectionObserver(function(entries, observer){
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.style.opacity = 1;
+        entry.target.style.transform = 'translateY(0)';
+        observer.unobserve(entry.target);
+      });
+    }, appearOptions);
+
+    faders.forEach(fader => { appearOnScroll.observe(fader); });
+  </script>
+</body>
+</html>
