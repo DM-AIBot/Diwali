@@ -48,8 +48,8 @@ button:hover { background: #74b9ff; }
 <script>
 function speak(text, callback) {
   const speech = new SpeechSynthesisUtterance(text);
-  speech.rate = 1.2;
-  speech.pitch = 1.2;
+  speech.rate = 1;
+  speech.pitch = 1;
   speech.onend = () => callback && callback();
   window.speechSynthesis.speak(speech);
 }
